@@ -280,7 +280,9 @@ export const invoicesRouter = createRouter({
           : undefined,
       ),
       with: {
-        lineItems: { columns: { description: true, quantity: true, hourly: true, payRateInSubunits: true } },
+        lineItems: {
+          columns: { description: true, quantity: true, hourly: true, payRateInSubunits: true, githubPrUrl: true },
+        },
         expenses: { columns: { id: true, totalAmountInCents: true, description: true, expenseCategoryId: true } },
         contractor: {
           with: {

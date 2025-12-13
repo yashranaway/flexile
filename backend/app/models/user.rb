@@ -60,6 +60,8 @@ class User < ApplicationRecord
   after_update_commit :update_dividend_status,
                       if: -> { current_sign_in_at_previously_changed? && current_sign_in_at_previously_was.nil? }
 
+  encrypts :github_access_token
+
   delegate(*TAX_ATTRIBUTES, to: :compliance_info, allow_nil: true)
 
   def name
@@ -168,7 +170,17 @@ class User < ApplicationRecord
     company_lawyers.exists?
   end
 
+  def github_connected?
+    github_uid.present? && github_access_token.present?
+  end
 
+  def disconnect_github!
+    update!(github_uid: nil, github_access_token: nil, github_username: nil)
+  end
+
+  def connect_github!(uid:, access_token:, username:)
+    update!(github_uid: uid.to_s, github_access_token: access_token, github_username: username)
+  end
 
   def password_required?
     false

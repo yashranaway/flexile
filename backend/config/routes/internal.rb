@@ -12,6 +12,7 @@ scope path: :internal, module: :internal do
   end
 
   resources :oauth, only: :create
+  resources :github_oauth, only: :create
   resource :current_user, only: :show
 
   resource :settings, only: [:update]
@@ -20,7 +21,13 @@ scope path: :internal, module: :internal do
     resource :tax, only: [:show, :update], controller: "tax"
     resources :bank_accounts, only: [:index, :create, :update]
     resource :equity, only: [:update], controller: "equity"
+    resource :github, only: [:show, :destroy], controller: "github" do
+      post :connect, on: :collection
+      get :callback, on: :collection
+    end
   end
+
+  resource :pr_info, only: [:show]
 
   resources :roles, only: [:index, :show]
 

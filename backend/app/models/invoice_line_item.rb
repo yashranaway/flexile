@@ -3,11 +3,18 @@
 class InvoiceLineItem < ApplicationRecord
   include Serializable
 
+  GITHUB_PR_URL_REGEX = %r{\Ahttps://github\.com/[^/]+/[^/]+/pull/\d+\z}
+
   belongs_to :invoice
 
   validates :description, presence: true
   validates :pay_rate_in_subunits, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
+  validates :github_pr_url, format: { with: GITHUB_PR_URL_REGEX, allow_blank: true }
+
+  def has_github_pr?
+    github_pr_url.present?
+  end
 
   def normalized_quantity
     quantity / (hourly? ? 60.0 : 1.0)

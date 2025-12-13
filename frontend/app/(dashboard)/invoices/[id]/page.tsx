@@ -40,6 +40,7 @@ import {
   useIsActionable,
   useIsDeletable,
 } from "..";
+import { PrLineItemDisplay } from "../PrLineItemDisplay";
 
 const getInvoiceStatusText = (
   invoice: { status: string; approvals: unknown[]; paidAt?: string | Date | null },
@@ -353,7 +354,11 @@ export default function InvoicePage() {
                         <TableRow key={index}>
                           <PrintTableCell className="w-[50%] align-top md:w-[60%] print:align-top">
                             <div className="max-w-full overflow-hidden pr-2 break-words whitespace-normal">
-                              {lineItem.description}
+                              <PrLineItemDisplay
+                                description={lineItem.description}
+                                githubPrUrl={lineItem.githubPrUrl}
+                                invoiceStatus={invoice.status}
+                              />
                             </div>
                           </PrintTableCell>
                           <PrintTableCell className="w-[20%] text-right align-top tabular-nums md:w-[15%] print:text-right print:align-top">
